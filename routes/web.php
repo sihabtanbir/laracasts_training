@@ -3,6 +3,7 @@
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use  App\Models\Job;
+use Illuminate\Database\Eloquent\Collection;
 
 
 
@@ -20,6 +21,8 @@ Route::get('/contact', function () {
 });
 
 Route::get('/jobs', function()  {
+
+    $jobs= Job::with('employer');
     return view('jobs',
     [
     'jobs' => Job::all()
