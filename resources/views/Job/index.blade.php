@@ -2,7 +2,10 @@
 
  <x-layout>
     <x-slot:heading>
-       Jobs list 
+      <div class="flex justify-between">
+         <div>Job</div>
+         <div><a class="font-normal font-small">create job</a></div>
+      </div>
     </x-slot:heading>
    
     @foreach ($jobs as $job)
