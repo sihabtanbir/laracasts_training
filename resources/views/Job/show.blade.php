@@ -7,10 +7,17 @@
     <p>
       this job pays {{ $job['salary'] }} per year
     </p>
-    
+    <div class="flex gap-2">
     <p class="mt-6">
       <a href="/jobs/{{$job->id}}/edit" class="btn bg-green-400 hover:text-white p-2 rounded-sm">Edit job</a>
     </p>
+    
+
+    <p class="mt-6">
+      <a href="{{route('job.delete', $job->id)}}" class="btn bg-red-400 hover:text-white p-2 rounded-sm">delete job</a>
+    </p>
+
+  </div>
 
  </x-layout>
    

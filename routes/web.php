@@ -3,7 +3,10 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Job;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\userController;
+use App\Http\Controllers\sessionController;
+
 
 
 
@@ -21,81 +24,22 @@ Route::get('/contact', function () {
     return view('contact');
 });
 
-Route::get('/jobs', function()  {
+Route::get('/jobs', [JobController::class, 'index']);
+Route::get('/jobs/create', [JobController::class, 'create'])->name('job.create');
+Route::get('/job/{job}', [JobController::class, 'show']);
+Route::post('/jobs', [JobController::class, 'store'])->name('job.store');
+Route::get('/jobs/{job}/edit', [JobController::class, 'edit']);
+Route::post('/jobs/{job}', [JobController::class, 'update'])->name('job.update');
+Route::get('/jobs/{job}/delete', [JobController::class, 'destroy'])->name('job.delete');
 
-    $jobs= Job::with('employer');
-    return view('Job.index',
-    [
-    'jobs' => Job::all()
-    ]
-);
-});
 
-Route::get('/jobs/{id}', function($id) {
-   
-    $job = Job::find($id);
-        
-        
-                   
-        
-    return view('Job.show', ['job' => $job ]);
-});
+//auth
+Route::get('/register', [userController::class, 'create']);
+Route::post('/register', [userController::class, 'store']);
+Route::get('/profile', [userController::class, 'edit']);
+Route::post('/profile', [userController::class, 'update']);
 
-Route::get('/job/create', function () {
-    return view('Job.create');
-});
-Route::post('/jobs', function () {
-   
-    request()->validate([
-        'title' => ['required'],
-        'salary' => ['required'],
-    ]);
-
-    Job->create([
-        'employer_id'=> '1',
-        'title' => request('title'),
-        'salary' => request('salary'),
-       
-    ]);
-    return redirect('/jobs');
-});
-
-Route::get('/jobs/{id}/edit', function($id) {
-   
-    $job = Job::find($id);
-        
-        
-                   
-        
-    return view('Job.edit', ['job' => $job ]);
-});
-
-Route::PATCH('/job/{id}', function($id){
-
-    request()->validate([
-        'title' => ['required'],
-        'salary' => ['required'],
-    ]);
-
-    $job = Job::find($id);
-
-    Job->update([
-        
-        'title' => request('title'),
-        'salary' => request('salary'),
-       
-    ]);
-
-    return redirect('/jobs/' . $job->id);
-
-});
-
-Route::delete('/job/{id}', function($id){
-
-    $job = Job::findOrFail($id);
-    $job-> delete();
-
-    return redirect('/jobs/' . $job->id);
-
-});
+Route::get('/login', [sessionController::class, 'create']);
+Route::post('/login', [sessionController::class, 'store']);
+Route::post('/logout', [sessionController::class, 'destroy'])->name('logout');
 
